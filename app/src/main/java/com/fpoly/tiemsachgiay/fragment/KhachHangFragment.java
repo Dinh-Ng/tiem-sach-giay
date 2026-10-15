@@ -36,8 +36,8 @@ public class KhachHangFragment extends Fragment {
     private MaterialButton btnLoginKh;
     private TextView tvSwitchToRegister;
 
-    // Register Views
-    private TextInputEditText edtRegHoTen, edtRegTaiKhoan, edtRegSdt, edtRegDiaChi, edtRegMatKhau, edtRegNhapLaiMatKhau;
+    // Register Views (Chỉ gồm: Họ tên - SĐT - Mật khẩu - Nhập lại mật khẩu)
+    private TextInputEditText edtRegHoTen, edtRegSdt, edtRegMatKhau, edtRegNhapLaiMatKhau;
     private MaterialButton btnRegisterKh;
     private TextView tvSwitchToLogin;
 
@@ -82,9 +82,7 @@ public class KhachHangFragment extends Fragment {
 
         // Register Views
         edtRegHoTen = view.findViewById(R.id.edt_reg_ho_ten);
-        edtRegTaiKhoan = view.findViewById(R.id.edt_reg_tai_khoan);
         edtRegSdt = view.findViewById(R.id.edt_reg_sdt);
-        edtRegDiaChi = view.findViewById(R.id.edt_reg_dia_chi);
         edtRegMatKhau = view.findViewById(R.id.edt_reg_mat_khau);
         edtRegNhapLaiMatKhau = view.findViewById(R.id.edt_reg_nhap_lai_mat_khau);
         btnRegisterKh = view.findViewById(R.id.btn_register_kh);
@@ -92,7 +90,6 @@ public class KhachHangFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // Switch between Login and Register via Toggle Buttons
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 if (checkedId == R.id.btn_toggle_login) {
@@ -103,11 +100,9 @@ public class KhachHangFragment extends Fragment {
             }
         });
 
-        // Switch via text click
         tvSwitchToRegister.setOnClickListener(v -> toggleGroup.check(R.id.btn_toggle_register));
         tvSwitchToLogin.setOnClickListener(v -> toggleGroup.check(R.id.btn_toggle_login));
 
-        // Submit buttons
         btnLoginKh.setOnClickListener(v -> performLogin());
         btnRegisterKh.setOnClickListener(v -> performRegister());
     }
@@ -140,40 +135,45 @@ public class KhachHangFragment extends Fragment {
             return;
         }
 
-        KhachHang khachHang = khachHangDAO.checkLogin(account, matKhau);
-        if (khachHang != null) {
-            SharedPreferences.Editor editor = pref.edit();
-            if (chkRememberKh.isChecked()) {
-                editor.putString(KEY_ACCOUNT, account);
-                editor.putString(KEY_PASS, matKhau);
-                editor.putBoolean(KEY_REMEMBER, true);
-            } else {
-                editor.clear();
+        khachHangDAO.checkLogin(account, matKhau, new KhachHangDAO.OnLoginListener() {
+            @Override
+            public void onSuccess(KhachHang khachHang) {
+                if (!isAdded()) return;
+                SharedPreferences.Editor editor = pref.edit();
+                if (chkRememberKh.isChecked()) {
+                    editor.putString(KEY_ACCOUNT, account);
+                    editor.putString(KEY_PASS, matKhau);
+                    editor.putBoolean(KEY_REMEMBER, true);
+                } else {
+                    editor.clear();
+                }
+                editor.apply();
+
+                Toast.makeText(requireContext(), getString(R.string.msg_login_success) + " Chào " + khachHang.getTenKH(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(requireActivity(), MainActivity.class);
+                intent.putExtra("user_type", "KHACH_HANG");
+                intent.putExtra("user_name", khachHang.getTenKH());
+                intent.putExtra("user_id", khachHang.getSdt() != null ? khachHang.getSdt() : khachHang.getTaiKhoan());
+                startActivity(intent);
+                requireActivity().finish();
             }
-            editor.apply();
 
-            Toast.makeText(requireContext(), getString(R.string.msg_login_success) + " Chào " + khachHang.getTenKH(), Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(requireActivity(), MainActivity.class);
-            intent.putExtra("user_type", "KHACH_HANG");
-            intent.putExtra("user_name", khachHang.getTenKH());
-            intent.putExtra("user_id", khachHang.getTaiKhoan());
-            startActivity(intent);
-            requireActivity().finish();
-        } else {
-            Toast.makeText(requireContext(), getString(R.string.msg_login_failed), Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(String message) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void performRegister() {
         String hoTen = edtRegHoTen.getText() != null ? edtRegHoTen.getText().toString().trim() : "";
-        String taiKhoan = edtRegTaiKhoan.getText() != null ? edtRegTaiKhoan.getText().toString().trim() : "";
         String sdt = edtRegSdt.getText() != null ? edtRegSdt.getText().toString().trim() : "";
-        String diaChi = edtRegDiaChi.getText() != null ? edtRegDiaChi.getText().toString().trim() : "";
         String matKhau = edtRegMatKhau.getText() != null ? edtRegMatKhau.getText().toString().trim() : "";
         String nhapLaiMatKhau = edtRegNhapLaiMatKhau.getText() != null ? edtRegNhapLaiMatKhau.getText().toString().trim() : "";
 
-        if (hoTen.isEmpty() || taiKhoan.isEmpty() || matKhau.isEmpty() || nhapLaiMatKhau.isEmpty()) {
+        if (hoTen.isEmpty() || sdt.isEmpty() || matKhau.isEmpty() || nhapLaiMatKhau.isEmpty()) {
             Toast.makeText(requireContext(), getString(R.string.msg_empty_fields), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -183,31 +183,28 @@ public class KhachHangFragment extends Fragment {
             return;
         }
 
-        if (khachHangDAO.checkAccountExists(taiKhoan)) {
-            Toast.makeText(requireContext(), getString(R.string.msg_account_exists), Toast.LENGTH_SHORT).show();
-            return;
-        }
+        KhachHang newKhachHang = new KhachHang(hoTen, sdt, matKhau);
+        khachHangDAO.register(newKhachHang, new KhachHangDAO.OnRegisterListener() {
+            @Override
+            public void onSuccess() {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), getString(R.string.msg_register_success), Toast.LENGTH_LONG).show();
+                edtTaiKhoanKh.setText(sdt);
+                edtMatKhauKh.setText(matKhau);
 
-        KhachHang newKhachHang = new KhachHang(hoTen, taiKhoan, matKhau, sdt, diaChi);
-        boolean isSuccess = khachHangDAO.register(newKhachHang);
+                toggleGroup.check(R.id.btn_toggle_login);
 
-        if (isSuccess) {
-            Toast.makeText(requireContext(), getString(R.string.msg_register_success), Toast.LENGTH_LONG).show();
-            edtTaiKhoanKh.setText(taiKhoan);
-            edtMatKhauKh.setText(matKhau);
-            
-            // Switch back to Login view
-            toggleGroup.check(R.id.btn_toggle_login);
+                edtRegHoTen.setText("");
+                edtRegSdt.setText("");
+                edtRegMatKhau.setText("");
+                edtRegNhapLaiMatKhau.setText("");
+            }
 
-            // Clear register form
-            edtRegHoTen.setText("");
-            edtRegTaiKhoan.setText("");
-            edtRegSdt.setText("");
-            edtRegDiaChi.setText("");
-            edtRegMatKhau.setText("");
-            edtRegNhapLaiMatKhau.setText("");
-        } else {
-            Toast.makeText(requireContext(), "Đăng ký thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(String message) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

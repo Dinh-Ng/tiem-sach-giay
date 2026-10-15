@@ -11,6 +11,14 @@ public class KhachHang {
     public KhachHang() {
     }
 
+    public KhachHang(String tenKH, String sdt, String matKhau) {
+        this.tenKH = tenKH;
+        this.sdt = sdt;
+        this.taiKhoan = sdt;
+        this.matKhau = matKhau;
+        this.diaChi = "";
+    }
+
     public KhachHang(String tenKH, String taiKhoan, String matKhau, String sdt, String diaChi) {
         this.tenKH = tenKH;
         this.taiKhoan = taiKhoan;

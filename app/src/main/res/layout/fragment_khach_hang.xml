@@ -199,29 +199,6 @@
                             android:textColor="@color/text_primary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Tên đăng nhập / Email -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_reg_tai_khoan"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="@string/hint_customer_account"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusTopStart="12dp"
-                        app:startIconDrawable="@android:drawable/ic_menu_myplaces">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_reg_tai_khoan"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
                     <!-- Số điện thoại -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_reg_sdt"
@@ -241,29 +218,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="phone"
-                            android:maxLines="1"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- Địa chỉ -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_reg_dia_chi"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="@string/hint_address"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusTopStart="12dp"
-                        app:startIconDrawable="@android:drawable/ic_menu_mapmode">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_reg_dia_chi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPostalAddress"
                             android:maxLines="1"
                             android:textColor="@color/text_primary" />
                     </com.google.android.material.textfield.TextInputLayout>

@@ -42,21 +42,21 @@ public class MainActivity extends AppCompatActivity {
         String userName = intent.getStringExtra("user_name");
 
         if (userName != null && !userName.isEmpty()) {
-            String roleText = "NHAN_VIEN".equals(userType) ? "Nhân viên: " : "Khách hàng: ";
+            String roleText = "NHAN_VIEN".equalsIgnoreCase(userType) ? "Nhân viên: " : "Khách hàng: ";
             tvHeaderUserInfo.setText("Xin chào " + roleText + userName);
         }
 
-        // Cấu hình Menu tương ứng theo loại tài khoản đăng nhập
+        // Cấu hình Menu Bottom Navigation tương ứng theo loại tài khoản:
+        // - Khách hàng: 2 tab (Sách - Cài đặt)
+        // - Nhân viên: 4 tab (Sách - Hóa đơn - Khách hàng - Cài đặt)
         bottomNavigationView.getMenu().clear();
-        if ("KHACH_HANG".equals(userType)) {
-            // Khách hàng: 2 tab (Sách - Cài đặt)
+        if ("KHACH_HANG".equalsIgnoreCase(userType)) {
             bottomNavigationView.inflateMenu(R.menu.menu_khach_hang);
         } else {
-            // Nhân viên: 4 tab (Sách - Hóa đơn - Khách hàng - Cài đặt)
             bottomNavigationView.inflateMenu(R.menu.menu_nhan_vien);
         }
 
-        // Listener xử lý chuyển Tab
+        // Listener xử lý khi bấm chuyển Tab
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             Fragment selectedFragment = null;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Load Tab Mặc định là Sách
+        // Mặc định hiển thị tab Sách khi vào Trang chủ
         if (savedInstanceState == null) {
             replaceFragment(new SachFragment());
             bottomNavigationView.setSelectedItemId(R.id.nav_sach);

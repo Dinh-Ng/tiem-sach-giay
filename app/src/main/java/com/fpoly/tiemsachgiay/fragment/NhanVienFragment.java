@@ -73,30 +73,35 @@ public class NhanVienFragment extends Fragment {
             return;
         }
 
-        NhanVien nhanVien = nhanVienDAO.checkLogin(maNV, matKhau);
-        if (nhanVien != null) {
-            // Ghi nhớ mật khẩu
-            SharedPreferences.Editor editor = pref.edit();
-            if (chkRemember.isChecked()) {
-                editor.putString(KEY_MA_NV, maNV);
-                editor.putString(KEY_PASS, matKhau);
-                editor.putBoolean(KEY_REMEMBER, true);
-            } else {
-                editor.clear();
+        nhanVienDAO.checkLogin(maNV, matKhau, new NhanVienDAO.OnLoginListener() {
+            @Override
+            public void onSuccess(NhanVien nhanVien) {
+                if (!isAdded()) return;
+                SharedPreferences.Editor editor = pref.edit();
+                if (chkRemember.isChecked()) {
+                    editor.putString(KEY_MA_NV, maNV);
+                    editor.putString(KEY_PASS, matKhau);
+                    editor.putBoolean(KEY_REMEMBER, true);
+                } else {
+                    editor.clear();
+                }
+                editor.apply();
+
+                Toast.makeText(requireContext(), getString(R.string.msg_login_success) + " Chào " + nhanVien.getHoTen(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(requireActivity(), MainActivity.class);
+                intent.putExtra("user_type", "NHAN_VIEN");
+                intent.putExtra("user_name", nhanVien.getHoTen());
+                intent.putExtra("user_id", nhanVien.getMaNV());
+                startActivity(intent);
+                requireActivity().finish();
             }
-            editor.apply();
 
-            Toast.makeText(requireContext(), getString(R.string.msg_login_success) + " Chào " + nhanVien.getHoTen(), Toast.LENGTH_SHORT).show();
-
-            // Chuyển sang Trang chủ
-            Intent intent = new Intent(requireActivity(), MainActivity.class);
-            intent.putExtra("user_type", "NHAN_VIEN");
-            intent.putExtra("user_name", nhanVien.getHoTen());
-            intent.putExtra("user_id", nhanVien.getMaNV());
-            startActivity(intent);
-            requireActivity().finish();
-        } else {
-            Toast.makeText(requireContext(), getString(R.string.msg_login_failed), Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(String message) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
