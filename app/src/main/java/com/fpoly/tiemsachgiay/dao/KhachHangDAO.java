@@ -4,18 +4,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import com.fpoly.tiemsachgiay.model.KhachHang;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class KhachHangDAO {
 
-    private DatabaseReference dbRef;
+    private FirebaseFirestore db;
 
     public interface OnLoginListener {
         void onSuccess(KhachHang khachHang);
@@ -29,32 +24,24 @@ public class KhachHangDAO {
 
     public KhachHangDAO(Context context) {
         try {
-            dbRef = FirebaseDatabase.getInstance().getReference("KhachHang");
+            db = FirebaseFirestore.getInstance();
         } catch (Exception e) {
-            try {
-                dbRef = FirebaseDatabase.getInstance("https://tiem-sach-giay-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("KhachHang");
-            } catch (Exception ex) {
-                dbRef = null;
-            }
+            db = null;
         }
     }
 
-    private DatabaseReference getReference() {
-        if (dbRef == null) {
+    private FirebaseFirestore getDb() {
+        if (db == null) {
             try {
-                dbRef = FirebaseDatabase.getInstance().getReference("KhachHang");
-            } catch (Exception e) {
-                try {
-                    dbRef = FirebaseDatabase.getInstance("https://tiem-sach-giay-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("KhachHang");
-                } catch (Exception ignored) {
-                }
+                db = FirebaseFirestore.getInstance();
+            } catch (Exception ignored) {
             }
         }
-        return dbRef;
+        return db;
     }
 
     public void checkLogin(String account, String matKhau, OnLoginListener listener) {
-        DatabaseReference ref = getReference();
+        FirebaseFirestore firestore = getDb();
         final boolean[] hasResponded = {false};
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -65,15 +52,15 @@ public class KhachHangDAO {
             if (("khachhang".equalsIgnoreCase(account) || "0912345678".equals(account)) && "123456".equals(matKhau)) {
                 KhachHang sample = new KhachHang("Khách Hàng Mẫu", "0912345678", "123456");
                 sample.setTaiKhoan("0912345678");
-                if (ref != null) {
-                    try { ref.child("0912345678").setValue(sample); } catch (Exception ignored) {}
+                if (firestore != null) {
+                    try { firestore.collection("KhachHang").document("0912345678").set(sample); } catch (Exception ignored) {}
                 }
                 listener.onSuccess(sample);
             } else if (!account.isEmpty() && !matKhau.isEmpty()) {
                 KhachHang khachHang = new KhachHang("Khách Hàng " + account, account, matKhau);
                 khachHang.setTaiKhoan(account);
-                if (ref != null) {
-                    try { ref.child(account).setValue(khachHang); } catch (Exception ignored) {}
+                if (firestore != null) {
+                    try { firestore.collection("KhachHang").document(account).set(khachHang); } catch (Exception ignored) {}
                 }
                 listener.onSuccess(khachHang);
             } else {
@@ -88,40 +75,36 @@ public class KhachHangDAO {
         };
         handler.postDelayed(timeoutRunnable, 1500);
 
-        if (ref == null) {
+        if (firestore == null) {
             handler.removeCallbacks(timeoutRunnable);
             fallbackLogin.run();
             return;
         }
 
         try {
-            ref.child(account).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
+            firestore.collection("KhachHang").document(account).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (hasResponded[0]) return;
 
-                    if (snapshot.exists()) {
-                        KhachHang khachHang = snapshot.getValue(KhachHang.class);
-                        if (khachHang != null && khachHang.getMatKhau() != null && khachHang.getMatKhau().equals(matKhau)) {
-                            listener.onSuccess(khachHang);
+                        if (documentSnapshot.exists()) {
+                            hasResponded[0] = true;
+                            handler.removeCallbacks(timeoutRunnable);
+                            KhachHang khachHang = documentSnapshot.toObject(KhachHang.class);
+                            if (khachHang != null && khachHang.getMatKhau() != null && khachHang.getMatKhau().equals(matKhau)) {
+                                listener.onSuccess(khachHang);
+                            } else {
+                                listener.onFailure("Mật khẩu không chính xác!");
+                            }
                         } else {
-                            listener.onFailure("Mật khẩu không chính xác!");
+                            searchByField(account, matKhau, listener, fallbackLogin, handler, timeoutRunnable, hasResponded);
                         }
-                    } else {
-                        searchByField(account, matKhau, listener, fallbackLogin, handler, timeoutRunnable, hasResponded);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
-                    fallbackLogin.run();
-                }
-            });
+                    })
+                    .addOnFailureListener(e -> {
+                        if (hasResponded[0]) return;
+                        hasResponded[0] = true;
+                        handler.removeCallbacks(timeoutRunnable);
+                        fallbackLogin.run();
+                    });
         } catch (Exception e) {
             if (!hasResponded[0]) {
                 hasResponded[0] = true;
@@ -132,41 +115,37 @@ public class KhachHangDAO {
     }
 
     private void searchByField(String account, String matKhau, OnLoginListener listener, Runnable fallbackLogin, Handler handler, Runnable timeoutRunnable, boolean[] hasResponded) {
-        DatabaseReference ref = getReference();
-        if (ref == null) {
+        FirebaseFirestore firestore = getDb();
+        if (firestore == null) {
             fallbackLogin.run();
             return;
         }
         try {
-            ref.orderByChild("sdt").equalTo(account).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
+            firestore.collection("KhachHang").whereEqualTo("sdt", account).get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (hasResponded[0]) return;
+                        hasResponded[0] = true;
+                        handler.removeCallbacks(timeoutRunnable);
 
-                    if (snapshot.exists()) {
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            KhachHang khachHang = child.getValue(KhachHang.class);
-                            if (khachHang != null && khachHang.getMatKhau() != null && khachHang.getMatKhau().equals(matKhau)) {
-                                listener.onSuccess(khachHang);
-                                return;
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                KhachHang khachHang = doc.toObject(KhachHang.class);
+                                if (khachHang != null && khachHang.getMatKhau() != null && khachHang.getMatKhau().equals(matKhau)) {
+                                    listener.onSuccess(khachHang);
+                                    return;
+                                }
                             }
+                            listener.onFailure("Mật khẩu không chính xác!");
+                        } else {
+                            fallbackLogin.run();
                         }
-                        listener.onFailure("Mật khẩu không chính xác!");
-                    } else {
+                    })
+                    .addOnFailureListener(e -> {
+                        if (hasResponded[0]) return;
+                        hasResponded[0] = true;
+                        handler.removeCallbacks(timeoutRunnable);
                         fallbackLogin.run();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
-                    fallbackLogin.run();
-                }
-            });
+                    });
         } catch (Exception e) {
             if (!hasResponded[0]) {
                 hasResponded[0] = true;
@@ -177,26 +156,26 @@ public class KhachHangDAO {
     }
 
     public void register(KhachHang kh, OnRegisterListener listener) {
-        DatabaseReference ref = getReference();
-        String key = kh.getSdt();
-        if (key == null || key.isEmpty()) {
-            key = kh.getTaiKhoan();
+        FirebaseFirestore firestore = getDb();
+        String userKey = kh.getSdt();
+        if (userKey == null || userKey.isEmpty()) {
+            userKey = kh.getTaiKhoan();
         }
 
-        if (key == null || key.isEmpty()) {
+        if (userKey == null || userKey.isEmpty()) {
             listener.onFailure("Vui lòng nhập số điện thoại!");
             return;
         }
 
         final boolean[] hasResponded = {false};
         Handler handler = new Handler(Looper.getMainLooper());
-        final String userKey = key;
+        final String finalKey = userKey;
 
         Runnable doRegisterSuccess = () -> {
             if (hasResponded[0]) return;
             hasResponded[0] = true;
-            if (ref != null) {
-                try { ref.child(userKey).setValue(kh); } catch (Exception ignored) {}
+            if (firestore != null) {
+                try { firestore.collection("KhachHang").document(finalKey).set(kh); } catch (Exception ignored) {}
             }
             listener.onSuccess();
         };
@@ -208,37 +187,33 @@ public class KhachHangDAO {
         };
         handler.postDelayed(timeoutRunnable, 1500);
 
-        if (ref == null) {
+        if (firestore == null) {
             handler.removeCallbacks(timeoutRunnable);
             doRegisterSuccess.run();
             return;
         }
 
         try {
-            ref.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
+            firestore.collection("KhachHang").document(finalKey).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (hasResponded[0]) return;
+                        hasResponded[0] = true;
+                        handler.removeCallbacks(timeoutRunnable);
 
-                    if (snapshot.exists()) {
-                        listener.onFailure("Số điện thoại này đã được đăng ký!");
-                    } else {
-                        ref.child(userKey).setValue(kh).addOnCompleteListener(task -> {
-                            listener.onSuccess();
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    if (hasResponded[0]) return;
-                    hasResponded[0] = true;
-                    handler.removeCallbacks(timeoutRunnable);
-                    doRegisterSuccess.run();
-                }
-            });
+                        if (documentSnapshot.exists()) {
+                            listener.onFailure("Số điện thoại này đã được đăng ký!");
+                        } else {
+                            firestore.collection("KhachHang").document(finalKey).set(kh)
+                                    .addOnSuccessListener(aVoid -> listener.onSuccess())
+                                    .addOnFailureListener(e -> listener.onSuccess());
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        if (hasResponded[0]) return;
+                        hasResponded[0] = true;
+                        handler.removeCallbacks(timeoutRunnable);
+                        doRegisterSuccess.run();
+                    });
         } catch (Exception e) {
             if (!hasResponded[0]) {
                 hasResponded[0] = true;
