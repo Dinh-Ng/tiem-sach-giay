@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.google.services)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -10,6 +10,7 @@ android {
     }
 
     defaultConfig {
+
         applicationId = "com.fpoly.tiemsachgiay"
         minSdk = 24
         targetSdk = 37
@@ -33,8 +34,9 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)

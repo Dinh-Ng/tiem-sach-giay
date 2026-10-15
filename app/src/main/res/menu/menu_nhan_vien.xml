@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_sach"
+        android:icon="@drawable/ic_nav_sach"
+        android:title="@string/nav_sach" />
+
+    <item
+        android:id="@+id/nav_hoa_don"
+        android:icon="@drawable/ic_nav_hoa_don"
+        android:title="@string/nav_hoa_don" />
+
+    <item
+        android:id="@+id/nav_khach_hang"
+        android:icon="@drawable/ic_nav_khach_hang"
+        android:title="@string/nav_khach_hang" />
+
+    <item
+        android:id="@+id/nav_cai_dat"
+        android:icon="@drawable/ic_nav_cai_dat"
+        android:title="@string/nav_cai_dat" />
+
+</menu>

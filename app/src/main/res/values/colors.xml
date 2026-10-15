@@ -2,4 +2,24 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary Theme Colors for Tiệm Sách Giấy -->
+    <color name="primary_book">#6A381F</color>
+    <color name="primary_dark_book">#482310</color>
+    <color name="primary_light_book">#8D5230</color>
+    <color name="accent_warm">#D97706</color>
+    <color name="accent_warm_light">#FEF3C7</color>
+
+    <!-- Background & Card Colors -->
+    <color name="bg_paper">#FDFBF7</color>
+    <color name="card_bg">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#2D241E</color>
+    <color name="text_secondary">#786A60</color>
+    <color name="text_hint">#A0948B</color>
+
+    <!-- Status Colors -->
+    <color name="error_red">#D32F2F</color>
+    <color name="success_green">#2E7D32</color>
 </resources>

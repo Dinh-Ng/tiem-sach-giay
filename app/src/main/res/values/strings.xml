@@ -1,3 +1,40 @@
 <resources>
-    <string name="app_name">Tiem Sach Giay</string>
+    <string name="app_name">Tiệm Sách Giấy</string>
+    <string name="subtitle_app">Chào mừng bạn đến với Tiệm Sách Giấy</string>
+    <string name="tab_nhan_vien">Nhân viên</string>
+    <string name="tab_khach_hang">Khách hàng</string>
+    <string name="login_title_nhan_vien">Đăng nhập Nhân viên</string>
+    <string name="login_title_khach_hang">Đăng nhập Khách hàng</string>
+    <string name="register_title_khach_hang">Đăng ký Khách hàng</string>
+
+    <!-- Navigation Tabs -->
+    <string name="nav_sach">Sách</string>
+    <string name="nav_hoa_don">Hóa đơn</string>
+    <string name="nav_khach_hang">Khách hàng</string>
+    <string name="nav_cai_dat">Cài đặt</string>
+
+    <!-- Inputs -->
+    <string name="hint_username">Tên đăng nhập / Mã NV</string>
+    <string name="hint_customer_account">Số điện thoại / Email</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_retype_password">Nhập lại mật khẩu</string>
+    <string name="hint_fullname">Họ và tên</string>
+    <string name="hint_phone">Số điện thoại</string>
+    <string name="hint_address">Địa chỉ giao hàng</string>
+    <string name="remember_me">Ghi nhớ mật khẩu</string>
+
+    <!-- Buttons & Switches -->
+    <string name="btn_login">ĐĂNG NHẬP</string>
+    <string name="btn_register">ĐĂNG KÝ</string>
+    <string name="btn_logout">Đăng xuất</string>
+    <string name="switch_to_register">Chưa có tài khoản? Đăng ký ngay</string>
+    <string name="switch_to_login">Đã có tài khoản? Đăng nhập</string>
+
+    <!-- Messages -->
+    <string name="msg_empty_fields">Vui lòng điền đầy đủ thông tin!</string>
+    <string name="msg_password_mismatch">Mật khẩu nhập lại không khớp!</string>
+    <string name="msg_login_success">Đăng nhập thành công!</string>
+    <string name="msg_login_failed">Tên đăng nhập hoặc mật khẩu không chính xác!</string>
+    <string name="msg_register_success">Đăng ký tài khoản thành công! Vui lòng đăng nhập.</string>
+    <string name="msg_account_exists">Tài khoản này đã tồn tại trên hệ thống!</string>
 </resources>
