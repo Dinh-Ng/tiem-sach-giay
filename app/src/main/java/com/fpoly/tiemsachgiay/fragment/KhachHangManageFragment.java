@@ -23,7 +23,6 @@ import com.fpoly.tiemsachgiay.R;
 import com.fpoly.tiemsachgiay.adapter.KhachHangAdapter;
 import com.fpoly.tiemsachgiay.dao.KhachHangDAO;
 import com.fpoly.tiemsachgiay.model.KhachHang;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,14 +67,11 @@ public class KhachHangManageFragment extends Fragment {
         layoutEmpty = view.findViewById(R.id.layout_empty_kh);
         tvEmptyMessage = view.findViewById(R.id.tv_empty_message_kh);
         edtSearch = view.findViewById(R.id.edt_search_kh);
-
-        View fabAdd = view.findViewById(R.id.fab_add_kh);
-        fabAdd.setOnClickListener(v -> showAddCustomerDialog());
     }
 
     private void setupRecyclerView() {
         rvKhachHang.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new KhachHangAdapter(requireContext(), filteredCustomerList, kh -> showDeleteConfirmation(kh));
+        adapter = new KhachHangAdapter(requireContext(), filteredCustomerList, this::showDeleteConfirmation);
         rvKhachHang.setAdapter(adapter);
     }
 
@@ -154,63 +150,6 @@ public class KhachHangManageFragment extends Fragment {
             rvKhachHang.setVisibility(View.VISIBLE);
             layoutEmpty.setVisibility(View.GONE);
         }
-    }
-
-    private void showAddCustomerDialog() {
-        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_khach_hang_manage, null);
-
-        TextView tvTitle = dialogView.findViewById(R.id.tv_dialog_title_kh);
-        EditText edtHoTen = dialogView.findViewById(R.id.edt_dialog_ho_ten_kh);
-        EditText edtSdt = dialogView.findViewById(R.id.edt_dialog_sdt_kh);
-        EditText edtDiaChi = dialogView.findViewById(R.id.edt_dialog_dia_chi_kh);
-        MaterialButton btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel_kh);
-        MaterialButton btnSave = dialogView.findViewById(R.id.btn_dialog_save_kh);
-
-        tvTitle.setText("Thêm Khách Hàng Mới");
-
-        AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        btnSave.setOnClickListener(v -> {
-            String hoTen = edtHoTen.getText() != null ? edtHoTen.getText().toString().trim() : "";
-            String sdt = edtSdt.getText() != null ? edtSdt.getText().toString().trim() : "";
-            String diaChi = edtDiaChi.getText() != null ? edtDiaChi.getText().toString().trim() : "";
-
-            if (hoTen.isEmpty() || sdt.isEmpty()) {
-                Toast.makeText(requireContext(), "Vui lòng nhập Họ tên và Số điện thoại (*)", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            btnSave.setEnabled(false);
-            Toast.makeText(requireContext(), "Đang lưu thông tin...", Toast.LENGTH_SHORT).show();
-
-            // Đặt mật khẩu mặc định là 123456
-            KhachHang khachHang = new KhachHang(hoTen, sdt, "123456", sdt, diaChi);
-
-            khachHangDAO.insert(khachHang, new KhachHangDAO.OnActionListener() {
-                @Override
-                public void onSuccess() {
-                    if (!isAdded()) return;
-                    btnSave.setEnabled(true);
-                    Toast.makeText(requireContext(), "Thêm khách hàng mới thành công!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                    loadCustomersFromFirestore();
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    if (!isAdded()) return;
-                    btnSave.setEnabled(true);
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
-
-        dialog.show();
     }
 
     private void showDeleteConfirmation(KhachHang khachHang) {
