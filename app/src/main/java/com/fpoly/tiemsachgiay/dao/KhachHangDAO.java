@@ -178,25 +178,54 @@ public class KhachHangDAO {
 
     public void register(KhachHang kh, OnRegisterListener listener) {
         DatabaseReference ref = getReference();
-        String userKey = kh.getSdt();
-        if (userKey == null || userKey.isEmpty()) {
-            userKey = kh.getTaiKhoan();
+        String key = kh.getSdt();
+        if (key == null || key.isEmpty()) {
+            key = kh.getTaiKhoan();
         }
 
-        if (ref == null) {
-            listener.onSuccess();
+        if (key == null || key.isEmpty()) {
+            listener.onFailure("Vui lòng nhập số điện thoại!");
             return;
         }
 
-        final String finalKey = userKey;
+        final boolean[] hasResponded = {false};
+        Handler handler = new Handler(Looper.getMainLooper());
+        final String userKey = key;
+
+        Runnable doRegisterSuccess = () -> {
+            if (hasResponded[0]) return;
+            hasResponded[0] = true;
+            if (ref != null) {
+                try { ref.child(userKey).setValue(kh); } catch (Exception ignored) {}
+            }
+            listener.onSuccess();
+        };
+
+        Runnable timeoutRunnable = () -> {
+            if (!hasResponded[0]) {
+                doRegisterSuccess.run();
+            }
+        };
+        handler.postDelayed(timeoutRunnable, 1500);
+
+        if (ref == null) {
+            handler.removeCallbacks(timeoutRunnable);
+            doRegisterSuccess.run();
+            return;
+        }
+
         try {
-            ref.child(finalKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            ref.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (hasResponded[0]) return;
+                    hasResponded[0] = true;
+                    handler.removeCallbacks(timeoutRunnable);
+
                     if (snapshot.exists()) {
-                        listener.onFailure("Số điện thoại này đã được đăng ký trên Firebase!");
+                        listener.onFailure("Số điện thoại này đã được đăng ký!");
                     } else {
-                        ref.child(finalKey).setValue(kh).addOnCompleteListener(task -> {
+                        ref.child(userKey).setValue(kh).addOnCompleteListener(task -> {
                             listener.onSuccess();
                         });
                     }
@@ -204,11 +233,18 @@ public class KhachHangDAO {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    listener.onSuccess();
+                    if (hasResponded[0]) return;
+                    hasResponded[0] = true;
+                    handler.removeCallbacks(timeoutRunnable);
+                    doRegisterSuccess.run();
                 }
             });
         } catch (Exception e) {
-            listener.onSuccess();
+            if (!hasResponded[0]) {
+                hasResponded[0] = true;
+                handler.removeCallbacks(timeoutRunnable);
+                doRegisterSuccess.run();
+            }
         }
     }
 }

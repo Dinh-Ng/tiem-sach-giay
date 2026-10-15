@@ -135,6 +135,8 @@ public class KhachHangFragment extends Fragment {
             return;
         }
 
+        Toast.makeText(requireContext(), "Đang đăng nhập...", Toast.LENGTH_SHORT).show();
+
         khachHangDAO.checkLogin(account, matKhau, new KhachHangDAO.OnLoginListener() {
             @Override
             public void onSuccess(KhachHang khachHang) {
@@ -183,7 +185,11 @@ public class KhachHangFragment extends Fragment {
             return;
         }
 
+        Toast.makeText(requireContext(), "Đang xử lý đăng ký...", Toast.LENGTH_SHORT).show();
+
         KhachHang newKhachHang = new KhachHang(hoTen, sdt, matKhau);
+        newKhachHang.setTaiKhoan(sdt);
+
         khachHangDAO.register(newKhachHang, new KhachHangDAO.OnRegisterListener() {
             @Override
             public void onSuccess() {

@@ -1,9 +1,8 @@
 package com.fpoly.tiemsachgiay.model;
 
 public class KhachHang {
-    private int maKH;
     private String tenKH;
-    private String taiKhoan; // sdt hoac email hoac username
+    private String taiKhoan;
     private String matKhau;
     private String sdt;
     private String diaChi;
@@ -25,23 +24,6 @@ public class KhachHang {
         this.matKhau = matKhau;
         this.sdt = sdt;
         this.diaChi = diaChi;
-    }
-
-    public KhachHang(int maKH, String tenKH, String taiKhoan, String matKhau, String sdt, String diaChi) {
-        this.maKH = maKH;
-        this.tenKH = tenKH;
-        this.taiKhoan = taiKhoan;
-        this.matKhau = matKhau;
-        this.sdt = sdt;
-        this.diaChi = diaChi;
-    }
-
-    public int getMaKH() {
-        return maKH;
-    }
-
-    public void setMaKH(int maKH) {
-        this.maKH = maKH;
     }
 
     public String getTenKH() {
