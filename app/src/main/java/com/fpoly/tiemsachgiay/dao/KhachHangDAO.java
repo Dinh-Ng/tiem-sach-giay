@@ -8,7 +8,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KhachHangDAO {
 
@@ -51,6 +53,16 @@ public class KhachHangDAO {
         db = FirebaseFirestore.getInstance();
     }
 
+    private Map<String, Object> khachHangToMap(KhachHang kh) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("tenKH", kh.getTenKH() != null ? kh.getTenKH() : "");
+        map.put("taiKhoan", kh.getTaiKhoan() != null ? kh.getTaiKhoan() : "");
+        map.put("matKhau", kh.getMatKhau() != null ? kh.getMatKhau() : "");
+        map.put("sdt", kh.getSdt() != null ? kh.getSdt() : "");
+        map.put("diaChi", kh.getDiaChi() != null ? kh.getDiaChi() : "");
+        return map;
+    }
+
     /**
      * Authenticate customer credentials against Firestore
      */
@@ -68,7 +80,7 @@ public class KhachHangDAO {
             KhachHang sample = new KhachHang("Khách Hàng Mẫu", "0912345678", "123456");
             sample.setTaiKhoan("0912345678");
             try {
-                db.collection(COLLECTION_NAME).document("0912345678").set(sample);
+                db.collection(COLLECTION_NAME).document("0912345678").set(khachHangToMap(sample));
             } catch (Exception ignored) {
             }
             listener.onSuccess(sample);
@@ -141,7 +153,7 @@ public class KhachHangDAO {
                     if (documentSnapshot.exists()) {
                         listener.onFailure("Số điện thoại này đã được đăng ký!");
                     } else {
-                        db.collection(COLLECTION_NAME).document(finalKey).set(kh)
+                        db.collection(COLLECTION_NAME).document(finalKey).set(khachHangToMap(kh))
                                 .addOnSuccessListener(aVoid -> listener.onSuccess())
                                 .addOnFailureListener(e -> listener.onFailure("Đăng ký thất bại: " + e.getMessage()));
                     }
@@ -213,7 +225,7 @@ public class KhachHangDAO {
             return;
         }
 
-        db.collection(COLLECTION_NAME).document(key.trim()).set(khachHang)
+        db.collection(COLLECTION_NAME).document(key.trim()).set(khachHangToMap(khachHang))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure("Lỗi thêm khách hàng: " + e.getMessage()));
     }
@@ -237,7 +249,7 @@ public class KhachHangDAO {
             return;
         }
 
-        db.collection(COLLECTION_NAME).document(key.trim()).set(khachHang)
+        db.collection(COLLECTION_NAME).document(key.trim()).set(khachHangToMap(khachHang))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure("Lỗi cập nhật khách hàng: " + e.getMessage()));
     }

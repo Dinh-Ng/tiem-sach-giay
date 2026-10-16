@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="@color/card_bg"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/accent_warm_light"
+    app:strokeWidth="1.5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Ảnh bìa sách Unsplash -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_sach"
+            android:layout_width="85dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_book_placeholder"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:strokeColor="@color/accent_warm_light"
+            app:strokeWidth="1dp" />
+
+        <!-- Thông tin chi tiết sách -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Thể loại & Số lượng Badge -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_the_loai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_badge"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="3dp"
+                    android:textColor="@color/accent_warm"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="Văn học" />
+
+                <TextView
+                    android:id="@+id/tv_so_luong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_category_badge"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:textColor="@color/primary_book"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="Còn lại: 15" />
+
+            </LinearLayout>
+
+            <!-- Tên sách -->
+            <TextView
+                android:id="@+id/tv_ten_sach"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Dế Mèn Phiêu Lưu Ký" />
+
+            <!-- Tác giả -->
+            <TextView
+                android:id="@+id/tv_tac_gia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                tools:text="Tác giả: Tô Hoài" />
+
+            <!-- Khung Giá tiền -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Giá bán/giảm nổi bật -->
+                <TextView
+                    android:id="@+id/tv_gia_giam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_book"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="70.000 ₫" />
+
+                <!-- Giá gốc gạch ngang -->
+                <TextView
+                    android:id="@+id/tv_gia_goc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/text_hint"
+                    android:textSize="12sp"
+                    tools:text="85.000 ₫" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Thao tác Sửa & Xóa -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_edit_sach"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Sửa sách"
+                android:padding="6dp"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/primary_book" />
+
+            <ImageButton
+                android:id="@+id/btn_delete_sach"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Xóa sách"
+                android:padding="6dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/error_red" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

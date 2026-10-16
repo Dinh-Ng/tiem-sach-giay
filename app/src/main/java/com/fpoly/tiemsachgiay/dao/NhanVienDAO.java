@@ -7,7 +7,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NhanVienDAO {
 
@@ -45,6 +47,15 @@ public class NhanVienDAO {
         db = FirebaseFirestore.getInstance();
     }
 
+    private Map<String, Object> nhanVienToMap(NhanVien nv) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("maNV", nv.getMaNV() != null ? nv.getMaNV() : "");
+        map.put("hoTen", nv.getHoTen() != null ? nv.getHoTen() : "");
+        map.put("matKhau", nv.getMatKhau() != null ? nv.getMatKhau() : "");
+        map.put("chucVu", nv.getChucVu() != null ? nv.getChucVu() : "Nhân viên");
+        return map;
+    }
+
     /**
      * Authenticate employee credentials against Firestore
      */
@@ -61,7 +72,7 @@ public class NhanVienDAO {
         if ("admin".equalsIgnoreCase(cleanMaNV) && "admin123".equals(cleanMatKhau)) {
             NhanVien admin = new NhanVien("admin", "Quản lý Tiệm Sách", "admin123", "Quản lý");
             try {
-                db.collection(COLLECTION_NAME).document("admin").set(admin);
+                db.collection(COLLECTION_NAME).document("admin").set(nhanVienToMap(admin));
             } catch (Exception ignored) {
             }
             listener.onSuccess(admin);
@@ -71,7 +82,7 @@ public class NhanVienDAO {
         if ("nv01".equalsIgnoreCase(cleanMaNV) && "123456".equals(cleanMatKhau)) {
             NhanVien nv01 = new NhanVien("nv01", "Nguyễn Văn Nam", "123456", "Thu ngân");
             try {
-                db.collection(COLLECTION_NAME).document("nv01").set(nv01);
+                db.collection(COLLECTION_NAME).document("nv01").set(nhanVienToMap(nv01));
             } catch (Exception ignored) {
             }
             listener.onSuccess(nv01);
@@ -149,7 +160,7 @@ public class NhanVienDAO {
             return;
         }
 
-        db.collection(COLLECTION_NAME).document(nhanVien.getMaNV().trim()).set(nhanVien)
+        db.collection(COLLECTION_NAME).document(nhanVien.getMaNV().trim()).set(nhanVienToMap(nhanVien))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure("Lỗi thêm nhân viên: " + e.getMessage()));
     }
@@ -163,7 +174,7 @@ public class NhanVienDAO {
             return;
         }
 
-        db.collection(COLLECTION_NAME).document(nhanVien.getMaNV().trim()).set(nhanVien)
+        db.collection(COLLECTION_NAME).document(nhanVien.getMaNV().trim()).set(nhanVienToMap(nhanVien))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure("Lỗi cập nhật nhân viên: " + e.getMessage()));
     }
