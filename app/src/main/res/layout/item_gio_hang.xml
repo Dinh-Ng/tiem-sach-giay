@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_bg"
+    android:orientation="vertical"
+    android:padding="0dp">
+
+    <!-- Đường kẻ phân cách nhẹ -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/accent_warm_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Ảnh bìa nhỏ -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_gio_hang_sach"
+            android:layout_width="64dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_book_placeholder"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+        <!-- Thông tin -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_gio_hang_ten_sach"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Dế Mèn Phiêu Lưu Ký" />
+
+            <TextView
+                android:id="@+id/tv_gio_hang_tac_gia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                tools:text="Tô Hoài" />
+
+            <!-- Giá đơn vị -->
+            <TextView
+                android:id="@+id/tv_gio_hang_gia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/primary_book"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="70.000 ₫" />
+
+            <!-- Điều chỉnh số lượng -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_category_badge"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="2dp">
+
+                <ImageView
+                    android:id="@+id/btn_giam_sl"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="Giảm"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_delete"
+                    app:tint="@color/primary_book" />
+
+                <TextView
+                    android:id="@+id/tv_so_luong_gio_hang"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="1" />
+
+                <ImageView
+                    android:id="@+id/btn_tang_sl"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="Tăng"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/primary_book" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Cột phải: Thành tiền + Nút xóa -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_gio_hang_thanh_tien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/accent_warm"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="70.000 ₫" />
+
+            <ImageView
+                android:id="@+id/btn_xoa_khoi_gio"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:contentDescription="Xóa khỏi giỏ"
+                android:padding="4dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/error_red" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

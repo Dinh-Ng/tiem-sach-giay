@@ -34,6 +34,12 @@
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Thanh toán / Đặt hàng -->
+        <activity
+            android:name=".ThanhToanActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
