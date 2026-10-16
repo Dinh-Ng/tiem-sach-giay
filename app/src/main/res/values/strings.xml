@@ -9,10 +9,12 @@
 
     <!-- Navigation Tabs -->
     <string name="nav_sach">Sách</string>
-    <string name="nav_hoa_don">Hóa đơn</string>
+    <string name="nav_hoa_don">Đơn hàng</string>
     <string name="nav_khach_hang">Khách hàng</string>
     <string name="nav_cai_dat">Cài đặt</string>
     <string name="nav_gio_hang">Giỏ hàng</string>
+    <string name="nav_don_hang">Đơn hàng</string>
+    <string name="nav_don_hang_kh">Đơn mua</string>
 
     <!-- Inputs -->
     <string name="hint_username">Tên đăng nhập / Mã NV</string>

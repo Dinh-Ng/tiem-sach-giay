@@ -1,71 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_paper"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="🧾 Quản Lý Hóa Đơn"
-        android:textColor="@color/primary_book"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.card.MaterialCardView
+    <!-- Header bar -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/card_bg"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:strokeColor="@color/accent_warm_light"
-        app:strokeWidth="1dp">
+        android:background="@color/card_bg"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📋 Quản Lý Đơn Hàng"
+            android:textColor="@color/primary_book"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_quan_ly_don_hang_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Quản lý và cập nhật trạng thái đơn hàng khách đặt"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+
+        <!-- Bộ lọc trạng thái đơn hàng -->
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_trang_thai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_tat_ca"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tất cả"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cho_xu_ly"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chờ xử lý"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_dang_giao"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đang giao"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_da_giao"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đã giao"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_da_huy"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đã hủy"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Danh sách tất cả đơn hàng -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_quan_ly_don_hang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="80dp" />
+
+        <!-- Loading indicator -->
+        <ProgressBar
+            android:id="@+id/pb_loading_don_hang_nv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/primary_book"
+            android:visibility="gone" />
+
+        <!-- Trạng thái trống -->
+        <LinearLayout
+            android:id="@+id/layout_empty_don_hang_nv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="32dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lịch Sử &amp; Lập Hóa Đơn Bán Sách"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:text="📑"
+                android:textSize="64sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Không tìm thấy đơn hàng"
+                android:textColor="@color/primary_book"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Tạo hóa đơn mới, thống kê doanh thu bán sách giấy..."
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="Chưa có đơn hàng nào trong hệ thống hoặc phù hợp với bộ lọc."
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
-
         </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Chức năng quản lý hóa đơn tiệm sách"
-            android:textColor="@color/text_hint"
-            android:textSize="14sp"
-            android:textStyle="italic" />
-
     </FrameLayout>
 
 </LinearLayout>

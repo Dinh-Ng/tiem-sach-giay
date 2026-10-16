@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="@color/card_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/accent_warm_light"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header: Mã đơn + Badge Trạng thái -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item_don_hang_ma"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/primary_book"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="#DH-ABC12345" />
+
+            <TextView
+                android:id="@+id/tv_item_don_hang_trang_thai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_category_badge"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/accent_warm"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Chờ xử lý" />
+        </LinearLayout>
+
+        <!-- Ngày giờ đặt -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_ngay_dat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_hint"
+            android:textSize="12sp"
+            tools:text="📅 16/10/2026 08:30" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/accent_warm_light" />
+
+        <!-- Người nhận & SĐT -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_nguoi_nhan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="👤 Nguyễn Văn A • 0912345678" />
+
+        <!-- Địa chỉ giao hàng -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_dia_chi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="📍 123 Đường Sách, Q. 1, TP. Hồ Chí Minh" />
+
+        <!-- Phương thức thanh toán -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_thanh_toan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="💳 Tiền mặt khi nhận hàng (COD)" />
+
+        <!-- Ghi chú nếu có -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_ghi_chu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_hint"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:visibility="gone"
+            tools:text="📝 Ghi chú: Giao giờ hành chính"
+            tools:visibility="visible" />
+
+        <!-- Danh sách sách tóm tắt -->
+        <TextView
+            android:id="@+id/tv_item_don_hang_danh_sach_sach"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_category_badge"
+            android:padding="8dp"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp"
+            tools:text="📚 2 sản phẩm:\n• Dế Mèn Phiêu Lưu Ký (x2)\n• Tuổi Trẻ Đáng Giá Bao Nhiêu (x1)" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/accent_warm_light" />
+
+        <!-- Footer: Tổng tiền + Nút hành động -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng tiền:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_item_don_hang_tong_tien"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/accent_warm"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="170.000 ₫" />
+            </LinearLayout>
+
+            <!-- Khối nút hành động cho Nhân viên -->
+            <LinearLayout
+                android:id="@+id/layout_nhan_vien_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_item_doi_trang_thai"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:paddingHorizontal="12dp"
+                    android:text="Cập nhật trạng thái"
+                    android:textColor="@color/primary_book"
+                    android:textSize="12sp"
+                    app:cornerRadius="18dp"
+                    app:strokeColor="@color/primary_book" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_item_xoa_don"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="4dp"
+                    android:padding="0dp"
+                    app:icon="@drawable/ic_delete"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconTint="@color/error_red" />
+            </LinearLayout>
+
+            <!-- Khối nút hành động cho Khách hàng (Hủy đơn khi chưa giao) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_item_khach_huy_don"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:paddingHorizontal="12dp"
+                android:text="Hủy đơn"
+                android:textColor="@color/error_red"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:cornerRadius="18dp"
+                app:strokeColor="@color/error_red" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

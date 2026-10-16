@@ -12,6 +12,11 @@
         android:title="@string/nav_gio_hang" />
 
     <item
+        android:id="@+id/nav_don_hang_kh"
+        android:icon="@drawable/ic_nav_hoa_don"
+        android:title="@string/nav_don_hang_kh" />
+
+    <item
         android:id="@+id/nav_cai_dat"
         android:icon="@drawable/ic_nav_cai_dat"
         android:title="@string/nav_cai_dat" />

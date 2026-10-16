@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.fpoly.tiemsachgiay.fragment.CaiDatFragment;
+import com.fpoly.tiemsachgiay.fragment.DonHangKhachHangFragment;
 import com.fpoly.tiemsachgiay.fragment.GioHangFragment;
 import com.fpoly.tiemsachgiay.fragment.HoaDonFragment;
 import com.fpoly.tiemsachgiay.fragment.KhachHangManageFragment;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new GioHangFragment();
                     // Xóa badge khi vào giỏ hàng
                     clearCartBadge();
+                } else if (itemId == R.id.nav_don_hang_kh) {
+                    selectedFragment = new DonHangKhachHangFragment();
                 } else if (itemId == R.id.nav_cai_dat) {
                     selectedFragment = new CaiDatFragment();
                 }
