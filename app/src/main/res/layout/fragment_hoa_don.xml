@@ -1,71 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_paper"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/bg_paper">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="🧾 Quản Lý Hóa Đơn"
-        android:textColor="@color/primary_book"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/card_bg"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:strokeColor="@color/accent_warm_light"
-        app:strokeWidth="1dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <!-- Header Bar Top với Tiêu đề & Nút Xem Doanh Thu (Top Right) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@color/primary_book"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="Quản lý hóa đơn"
+                android:src="@drawable/ic_nav_hoa_don"
+                app:tint="@color/white" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Lịch Sử &amp; Lập Hóa Đơn Bán Sách"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Quản lý Hóa đơn"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <!-- Button XEM DOANH THU (Top Right) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_doanh_thu"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Tạo hóa đơn mới, thống kê doanh thu bán sách giấy..."
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+                android:layout_height="38dp"
+                android:paddingHorizontal="12dp"
+                android:text="Xem doanh thu"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"
+                app:icon="@android:drawable/ic_menu_my_calendar"
+                app:iconSize="16dp"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/accent_warm_light"
+                app:strokeWidth="1.5dp" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center">
-
-        <TextView
+        <!-- Progress Bar Loading -->
+        <ProgressBar
+            android:id="@+id/pb_loading_hoa_don"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Chức năng quản lý hóa đơn tiệm sách"
-            android:textColor="@color/text_hint"
-            android:textSize="14sp"
-            android:textStyle="italic" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:indeterminateTint="@color/primary_book"
+            android:visibility="gone" />
 
-    </FrameLayout>
+        <!-- Trạng thái trống (Empty State) -->
+        <LinearLayout
+            android:id="@+id/layout_empty_hoa_don"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
 
-</LinearLayout>
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="Trống"
+                android:src="@drawable/ic_nav_hoa_don"
+                app:tint="@color/text_hint" />
+
+            <TextView
+                android:id="@+id/tv_empty_message_hoa_don"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Chưa có hóa đơn nào trong danh sách"
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <!-- RecyclerView Danh sách Hóa đơn -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_hoa_don"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"
+            tools:listitem="@layout/item_hoa_don" />
+
+    </LinearLayout>
+
+    <!-- FAB Tạo hóa đơn -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_add_hoa_don"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Tạo hóa đơn"
+        android:text="Tạo hóa đơn"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="@color/primary_book"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

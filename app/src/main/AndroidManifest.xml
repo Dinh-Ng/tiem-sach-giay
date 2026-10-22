@@ -34,6 +34,12 @@
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Thống kê Doanh thu -->
+        <activity
+            android:name=".DoanhThuActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
