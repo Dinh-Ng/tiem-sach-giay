@@ -40,6 +40,18 @@
             android:name=".ThanhToanActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Thay đổi thông tin cá nhân (Khách hàng) -->
+        <activity
+            android:name=".DoiThongTinActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Đổi mật khẩu -->
+        <activity
+            android:name=".DoiMatKhauActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
